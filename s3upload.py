@@ -9,3 +9,7 @@ session = boto3.Session(
 s3 = session.resource('s3', region_name='us-east-1')
 object = s3.Object('flushbriefing', 'data.json')
 object.put(Body=open('new.json', 'rb'), ACL='public-read')
+
+
+
+print('Upload test from royel')
