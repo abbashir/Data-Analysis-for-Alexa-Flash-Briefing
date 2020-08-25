@@ -1,0 +1,23 @@
+[
+  {
+    "uid": "CVE-2020-24208",
+    "updateDate": "2020-08-17T15:15Z",
+    "titleText": "Overall sales information",
+    "mainText": "Today overall sales cross the previous day. This is great news for the company. Trend increase day by day.",
+    "redirectionUrl": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-24208"
+  },
+  {
+    "uid": "CVE-2020-24220",
+    "updateDate": "2020-08-17T16:15Z",
+    "titleText": "Brand wise sales news",
+    "mainText": "Losectil sales are very high from other days in this month.",
+    "redirectionUrl": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-24220"
+  },
+  {
+    "uid": "CVE-2020-24369",
+    "updateDate": "2020-08-18T17:15Z",
+    "titleText": "Today’s Over all sales news",
+    "mainText": "Today’s sales are 100 Tk. It is the better than last day sales. Today's achievements is 89%. Among 9 NSM Forhad and Md Nazrul are not able to achieve their daily target. The main reason is Forhad makes 5% returns and Md Nazrul achieve only 45% sales target.",
+    "redirectionUrl": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-24369"
+  }
+]
