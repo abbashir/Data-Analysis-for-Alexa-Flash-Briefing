@@ -1,6 +1,7 @@
 import json
 import sql_queries as b
 
+# Create Dictionary for business
 business = {
     "id": "04",
     "target": b.YesterdayTarget,
@@ -8,6 +9,6 @@ business = {
     'Achievements': b.Achievement
 }
 
-# Serializing json
-business_json_data = json.dumps(business, indent=5)
+# Convert Dictionary to json data
+business_json_data = '['+ str(json.dumps(business, indent=5)) +']'
 print(business_json_data)
