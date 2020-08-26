@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Data-Analysis-for-Alexa-Flash-Briefing.iml" filepath="$PROJECT_DIR$/.idea/Data-Analysis-for-Alexa-Flash-Briefing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Machine_Learning/.idea/Machine Learning.iml" filepath="$PROJECT_DIR$/../Machine_Learning/.idea/Machine Learning.iml" />
     </modules>
   </component>
 </project>
