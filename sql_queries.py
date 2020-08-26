@@ -15,13 +15,14 @@ YSalesQuery = """select  Sum(EXTINVMISC) as  YesterdaySales from OESalesDetails
                     where TRANSDATE = convert(varchar(8),DATEADD(D,0,GETDATE()-1),112)
                      """
 
+
 YesterdayTarget = pd.read_sql_query(YTargetQuery, connection)
 YesterdayTarget = int(YesterdayTarget.YesterdayTarget)
 
 YSales = pd.read_sql_query(YSalesQuery, connection)
 YSales = int(YSales.YesterdaySales)
-Achievement = str(round((YSales/YesterdayTarget)*100, 2)) + "%"
+Achievement = round((YSales/YesterdayTarget)*100, 2)
 
-print('Yesterday Target =', YesterdayTarget)
-print('Yesterday Sales =', YSales)
-print('Achievements = ', Achievement)
+# print('Yesterday Target =', YesterdayTarget)
+# print('Yesterday Sales =', YSales)
+# print('Achievements = ', Achievement)
