@@ -1,19 +1,9 @@
-{
-  "people": [
-    {
-      "name": "Scott",
-      "website": "stackabuse.com",
-      "from": "Nebraska"
-    },
-    {
-      "name": "Larry",
-      "website": "google.com",
-      "from": "Michigan"
-    },
-    {
-      "name": "Tim",
-      "website": "apple.com",
-      "from": "Alabama"
-    }
-  ]
-}
+[
+  {
+    "uid": "1ff1",
+    "updateDate": "2020-08-31 13:55:05.142067",
+    "titleText": "Yesterday Sales Summary",
+    "mainText": "Welcome to Transcom Limited. Our, last day target was : 51800000 Taka and total sales was : 53406531 Taka Overall sales achievements are : 103.1%",
+    "redirectionUrl": ""
+  }
+]

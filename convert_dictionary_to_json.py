@@ -21,3 +21,8 @@ business_json_data1 = str(json.dumps(business1, indent=5))
 
 all = '[' + business_json_data + ',\n' + business_json_data1 + ']'
 print(all)
+
+# Write data into data.json file
+with open("data.json", "w") as outfile:
+    outfile.write(all)
+    print('Data Write success')
