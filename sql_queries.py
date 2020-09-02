@@ -30,6 +30,36 @@ Achievement = str(round((int(YSales)/int(YesterdayTarget))*100, 2))
 # print('Yesterday Sales =', YSales)
 # print('Achievements = ', Achievement)
 
+# # ------------------ Todays Sales Trend -----------------
+trendq = """ DECLARE @DATE AS SMALLDATETIME = GETDATE()
+DECLARE @FIRSTDATEOFMONTH AS SMALLDATETIME = CONVERT(SMALLDATETIME, CONVERT(CHAR(4),YEAR(@DATE)) + '-' + CONVERT(CHAR(2),MONTH(@DATE)) + '-01')
+DECLARE @YESTERDAY AS SMALLDATETIME = DATEADD(d,-1,@DATE)
+DECLARE @This_month as CHAR(6)= CONVERT(VARCHAR(6), GETDATE(), 112)
+DECLARE @FIRSTDATEOFMONTH_STR AS CHAR(8)=CONVERT(VARCHAR(10), @FIRSTDATEOFMONTH , 112)
+DECLARE @YESTERDAY_STR AS CHAR(8)=CONVERT(VARCHAR(10), @YESTERDAY , 112)
+
+DECLARE @TotalDaysInMonth as Integer=(SELECT DATEDIFF(DAY, getdate(), DATEADD(MONTH, 1, getdate())))
+--print @TotalDaysInMonth
+DECLARE @totalDaysGone as integer =(SELECT DATEPART(DD, getdate())-1)
+--print @totalDaysGone
+
+Select
+    SUM(ISNULL(DAY_END_SALE.NET_SALE,0))/@totalDaysGone as Trend FROM
+(
+SELECT
+SUM(CASE WHEN TRANSTYPE=1 THEN EXTINVMISC ELSE 0 END) AS GROSS_SALE,
+SUM(CASE  WHEN TRANSTYPE=2 OR TRANSTYPE=4 THEN EXTINVMISC ELSE 0 END) AS NET_RETURN,
+SUM(EXTINVMISC) AS NET_SALE
+FROM OESALESDETAILS
+WHERE TRANSDATE BETWEEN  @FIRSTDATEOFMONTH_STR AND @YESTERDAY_STR GROUP BY MSOTR
+) AS DAY_END_SALE
+                     """
+trend_df = pd.read_sql_query(trendq, connection)
+
+trend = str(int(trend_df['Trend']))
+print(trend)
+
+
 
 # # Doctor call
 # doctorcall = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
@@ -120,5 +150,5 @@ lowest_chemist_coverage = """declare @lstdate varchar(8) = CONVERT(varchar(8), D
         group by branch.branch
         order by per asc
         """
-lowest_chemist_coveragedf = pd.read_sql_query(lowest_chemist_coverage, connection)
+# lowest_chemist_coveragedf = pd.read_sql_query(lowest_chemist_coverage, connection)
 # print(lowest_chemist_coveragedf)

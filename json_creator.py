@@ -4,9 +4,10 @@ import datetime
 import random
 import string
 
+
 # Random number generator
 def generate_random(size, chars=string.ascii_uppercase + string.digits):
-	return ''.join(random.choice(chars) for x in range(size))
+    return ''.join(random.choice(chars) for x in range(size))
 
 
 current_time = str(datetime.datetime.now())
@@ -18,12 +19,14 @@ data['Yesterday_Summary'] = {
     "updateDate": current_time,
     "titleText": "Yesterday Sales Summary",
     "mainText": "Welcome to Transcom Limited. Our, last day target was : " + s.YesterdayTarget +
-    " Taka" +
+                " Taka" +
                 " and total sales was : " + s.YSales + " Taka" +
-                " Overall sales achievements are : " + s.Achievement + "%",
+                " Overall sales achievements are : " + s.Achievement + "%" +
+                " Todays Sales Trends will be" +s.trend + 'Taka',
     "redirectionUrl": ""
 }
 
-print(list(data.values()))
+# print(list(data.values()))
 with open("data.json", "w") as f:
     json.dump(list(data.values()), f)
+    print('JSON Data created.')
