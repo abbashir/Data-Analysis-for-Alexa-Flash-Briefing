@@ -15,7 +15,7 @@ current_time = str(datetime.datetime.now())
 data = {}
 
 data['Yesterday_Summary'] = {
-    "uid": generate_random(4, "122f"),
+    "uid": generate_random(8, "1234ABCD"),
     "updateDate": current_time,
     "titleText": "Yesterday Sales Summary",
     "mainText": "Welcome to Transcom Limited. Our, last day target was : " + s.YesterdayTarget +

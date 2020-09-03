@@ -39,9 +39,7 @@ DECLARE @FIRSTDATEOFMONTH_STR AS CHAR(8)=CONVERT(VARCHAR(10), @FIRSTDATEOFMONTH 
 DECLARE @YESTERDAY_STR AS CHAR(8)=CONVERT(VARCHAR(10), @YESTERDAY , 112)
 
 DECLARE @TotalDaysInMonth as Integer=(SELECT DATEDIFF(DAY, getdate(), DATEADD(MONTH, 1, getdate())))
---print @TotalDaysInMonth
 DECLARE @totalDaysGone as integer =(SELECT DATEPART(DD, getdate())-1)
---print @totalDaysGone
 
 Select
     SUM(ISNULL(DAY_END_SALE.NET_SALE,0))/@totalDaysGone as Trend FROM
@@ -55,13 +53,12 @@ WHERE TRANSDATE BETWEEN  @FIRSTDATEOFMONTH_STR AND @YESTERDAY_STR GROUP BY MSOTR
 ) AS DAY_END_SALE
                      """
 trend_df = pd.read_sql_query(trendq, connection)
-
 trend = str(int(trend_df['Trend']))
-print(trend)
+# print(trend)
 
 
 
-# # Doctor call
+# # Doctor call -------------------
 # doctorcall = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
 #             declare @fstdate varchar(8) = CONVERT(varchar(8), dateadd(mm, -1,dateadd(dd, +1, eomonth(getdate()))),112)
 #
@@ -121,15 +118,15 @@ overall_chemist = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(
         group by AUDTORG) as covcust
         on totalcust.AUDTORG=covcust.AUDTORG """
 
-# overall_chemistdf = pd.read_sql_query(overall_chemist, connection)
+overall_chemistdf = pd.read_sql_query(overall_chemist, connection)
 
-# total_chemist = int(overall_chemistdf.totalchemist)
-# covered_chemist = int(overall_chemistdf.coverchemist)
-# chemist_cov_per = int(overall_chemistdf.percentage)
-#
-# print(total_chemist)
-# print(covered_chemist)
-# print(chemist_cov_per)
+total_chemist = int(overall_chemistdf.totalchemist)
+covered_chemist = int(overall_chemistdf.coverchemist)
+chemist_cov_per = int(overall_chemistdf.percentage)
+
+print('Total Chemist = ', total_chemist)
+print('Coverd Chemist =', covered_chemist)
+print('Coverd Percentage=', chemist_cov_per, '%')
 
 lowest_chemist_coverage = """declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
         select top 5 branch.branch, SUM(totalcust) as totalcust, SUM(covercust) as covercust, 
