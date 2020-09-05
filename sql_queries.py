@@ -60,27 +60,77 @@ connection1 = db.connect('DRIVER={SQL Server};'
 
 # # Doctor call -------------------
 
-doctorcall = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
-            declare @fstdate varchar(8) = CONVERT(varchar(8), dateadd(mm, -1,dateadd(dd, +1, eomonth(getdate()))),112)
+# doctorcall = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
+#             declare @fstdate varchar(8) = CONVERT(varchar(8), dateadd(mm, -1,dateadd(dd, +1, eomonth(getdate()))),112)
+#
+#             select
+#             count (distinct case when CONVERT(varchar(8), DATEADD(day,0,visit_date),112)=@lstdate then doc_id end) as lastdaycount,
+#             count (distinct case when CONVERT(varchar(8), DATEADD(day,0,visit_date),112) between @fstdate and @lstdate
+#             then doc_id end) as thismonthcount
+#             from sm_doctor_visit
+#             """
+# import datetime
+# current_day = datetime.datetime.now()
+# current_day = current_day.strftime("%d")
+#
+# doctorcalldf = pd.read_sql_query(doctorcall, connection1)
+# lastday_d_count = int(doctorcalldf.lastdaycount)
+# thismonth_d_count = int(doctorcalldf.thismonthcount)
+# averaged_call = round(thismonth_d_count/int(current_day)-1)
+#
+# print('lastday_d_count',  lastday_d_count)
+# print('thismonth_d_count', thismonth_d_count)
+# print('averaged_call', averaged_call)
 
-            select
-            count (distinct case when CONVERT(varchar(8), DATEADD(day,0,visit_date),112)=@lstdate then doc_id end) as lastdaycount,
-            count (distinct case when CONVERT(varchar(8), DATEADD(day,0,visit_date),112) between @fstdate and @lstdate
-            then doc_id end) as thismonthcount
-            from sm_doctor_visit
-            """
-import datetime
-current_day = datetime.datetime.now()
-current_day = current_day.strftime("%d")
 
-doctorcalldf = pd.read_sql_query(doctorcall, connection1)
-lastday_d_count = int(doctorcalldf.lastdaycount)
-thismonth_d_count = int(doctorcalldf.thismonthcount)
-averaged_call = round(thismonth_d_count/int(current_day)-1)
 
-print('lastday_d_count',  lastday_d_count)
-print('thismonth_d_count', thismonth_d_count)
-print('averaged_call', averaged_call)
+# # Chemist coverage
+overall_chemist = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
+        select SUM(totalcust) as totalchemist, SUM(covercust) as coverchemist,
+        (SUM(covercust)*100)/SUM(totalcust) as [percentage]
+        from
+        (select audtorg,count(distinct idcust) as totalcust  from CustomerInformation
+        where --audtorg='pbnskf' and
+        swactv=1
+        group by AUDTORG) as totalcust
+        left join
+        (select audtorg, count(distinct customer) as covercust from OESalesDetails
+        where transdate= @lstdate --and audtorg='pbnskf'
+        group by AUDTORG) as covcust
+        on totalcust.AUDTORG=covcust.AUDTORG """
+
+overall_chemistdf = pd.read_sql_query(overall_chemist, connection)
+
+total_chemist = int(overall_chemistdf.totalchemist)
+covered_chemist = int(overall_chemistdf.coverchemist)
+chemist_cov_per = int(overall_chemistdf.percentage)
+
+# print('Total Chemist = ', total_chemist)
+# print('Coverd Chemist =', covered_chemist)
+# print('Coverd Percentage =', chemist_cov_per, '%')
+
+# lowest_chemist_coverage = """declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
+#         select top 5 branch.branch, SUM(totalcust) as totalcust, SUM(covercust) as covercust,
+#         (SUM(covercust)*100)/SUM(totalcust) as per
+#         from
+#         (select audtorg,count(distinct idcust) as totalcust  from CustomerInformation
+#         where --audtorg='pbnskf' and
+#         swactv=1
+#         group by AUDTORG) as totalcust
+#         left join
+#         (select audtorg, count(distinct customer) as covercust from OESalesDetails
+#         where transdate= @lstdate --and audtorg='pbnskf'
+#         group by AUDTORG) as covcust
+#         on totalcust.AUDTORG=covcust.AUDTORG
+#         left join
+#         (select RTRIM(branch) as branch,skf from BRANCHLIST) as branch
+#         on totalcust.AUDTORG=branch.skf
+#         group by branch.branch
+#         order by per asc
+#         """
+# lowest_chemist_coveragedf = pd.read_sql_query(lowest_chemist_coverage, connection)
+# print(lowest_chemist_coveragedf)
+
 
 ## NSM wise sales, target and achievements
 # nsm = """
@@ -111,50 +161,3 @@ print('averaged_call', averaged_call)
 # print(nsm_ld_target)
 # print(nsm_ld_sales)
 # print(nsm_ld_achiv)
-
-# # Chemist coverage
-# overall_chemist = """ declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
-#         select SUM(totalcust) as totalchemist, SUM(covercust) as coverchemist,
-#         (SUM(covercust)*100)/SUM(totalcust) as [percentage]
-#         from
-#         (select audtorg,count(distinct idcust) as totalcust  from CustomerInformation
-#         where --audtorg='pbnskf' and
-#         swactv=1
-#         group by AUDTORG) as totalcust
-#         left join
-#         (select audtorg, count(distinct customer) as covercust from OESalesDetails
-#         where transdate= @lstdate --and audtorg='pbnskf'
-#         group by AUDTORG) as covcust
-#         on totalcust.AUDTORG=covcust.AUDTORG """
-#
-# overall_chemistdf = pd.read_sql_query(overall_chemist, connection)
-#
-# total_chemist = int(overall_chemistdf.totalchemist)
-# covered_chemist = int(overall_chemistdf.coverchemist)
-# chemist_cov_per = int(overall_chemistdf.percentage)
-#
-# print('Total Chemist = ', total_chemist)
-# print('Coverd Chemist =', covered_chemist)
-# print('Coverd Percentage=', chemist_cov_per, '%')
-
-# lowest_chemist_coverage = """declare @lstdate varchar(8) = CONVERT(varchar(8), DATEADD(day,-1,getdate()),112)
-#         select top 5 branch.branch, SUM(totalcust) as totalcust, SUM(covercust) as covercust,
-#         (SUM(covercust)*100)/SUM(totalcust) as per
-#         from
-#         (select audtorg,count(distinct idcust) as totalcust  from CustomerInformation
-#         where --audtorg='pbnskf' and
-#         swactv=1
-#         group by AUDTORG) as totalcust
-#         left join
-#         (select audtorg, count(distinct customer) as covercust from OESalesDetails
-#         where transdate= @lstdate --and audtorg='pbnskf'
-#         group by AUDTORG) as covcust
-#         on totalcust.AUDTORG=covcust.AUDTORG
-#         left join
-#         (select RTRIM(branch) as branch,skf from BRANCHLIST) as branch
-#         on totalcust.AUDTORG=branch.skf
-#         group by branch.branch
-#         order by per asc
-#         """
-# lowest_chemist_coveragedf = pd.read_sql_query(lowest_chemist_coverage, connection)
-# print(lowest_chemist_coveragedf)
