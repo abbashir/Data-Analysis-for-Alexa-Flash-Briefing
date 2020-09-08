@@ -26,7 +26,7 @@ def chemist_status(percentage, branches):
         status = " Which was covered only " + str(percentage) + " percent of our total chemist." + " Branch " + \
                  branches[0], branches[1], branches[2], branches[3] + " and " + branches[
                      4] + " makes lowest chemist coverage. please take necessary steps to make it higher."
-        return status
+    return status
 
 
 current_time = str(datetime.datetime.now())
@@ -54,30 +54,30 @@ data = {}
 #                 " " + str(d_call_status(s.lastday_d_count, s.averaged_call)) + " ",
 #     "redirectionUrl": ""
 # }
-#
-# data['ChemistCoverage'] = {
-#     "uid": generate_random(8, "1234ABCD"),
-#     "updateDate": current_time,
-#     "titleText": "Chemist Status",
-#     "mainText": "We have total " + str(s.total_chemist) + " active chemist " +
-#                 " Where last day our sales force visited " + str(s.covered_chemist) + " chemist" +
-#                 str(chemist_status(s.chemist_cov_per, s.lowest_chemist_branch)),
-#     "redirectionUrl": ""
-# }
 
-
-data['NSMStatus'] = {
+data['ChemistCoverage'] = {
     "uid": generate_random(8, "1234ABCD"),
     "updateDate": current_time,
-    "titleText": "NSM Yesterday Status",
-    "mainText": "Among  " + str(s.active_nsm) + " active NSM " +
-                ",".join(s.full_success_sales) + " are achieve their daily target completely. " +
-                ",".join(s.less_than95p_sales) + " makes less than 95% achievements. Possible reasons is " +
-                ",".join(s.less_than95p_sales_with_low_return) +
-                " makes low sales and " + ','.join(s.target_failed_1p_return) +
-                " makes low sales and more than 1% return",
+    "titleText": "Chemist Status",
+    "mainText": "We have total " + str(s.total_chemist) + " active chemist " +
+                " Where last day our sales force visited " + str(s.covered_chemist) + " chemist" +
+                str(chemist_status(s.chemist_cov_per, s.lowest_chemist_branch)),
     "redirectionUrl": ""
 }
+
+
+# data['NSMStatus'] = {
+#     "uid": generate_random(8, "1234ABCD"),
+#     "updateDate": current_time,
+#     "titleText": "NSM Yesterday Status",
+#     "mainText": "Among  " + str(s.active_nsm) + " active NSM " +
+#                 ",".join(s.full_success_sales) + " are achieve their daily target completely. " +
+#                 ",".join(s.less_than95p_sales) + " makes less than 95% achievements. Possible reasons is " +
+#                 ",".join(s.less_than95p_sales_with_low_return) +
+#                 " makes low sales and " + ','.join(s.target_failed_1p_return) +
+#                 " makes low sales and more than 1% return",
+#     "redirectionUrl": ""
+# }
 
 with open("data.json", "w") as f:
     json.dump(list(data.values()), f)
