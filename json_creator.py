@@ -65,7 +65,6 @@ data['ChemistCoverage'] = {
     "redirectionUrl": ""
 }
 
-
 # data['NSMStatus'] = {
 #     "uid": generate_random(8, "1234ABCD"),
 #     "updateDate": current_time,
@@ -82,5 +81,3 @@ data['ChemistCoverage'] = {
 with open("data.json", "w") as f:
     json.dump(list(data.values()), f)
     print('JSON Data created.')
-
-
