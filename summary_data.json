@@ -1,0 +1,23 @@
+[
+  {
+    "uid": "4ACD1B4B",
+    "updateDate": "2020-10-08 17:10:23.208811",
+    "titleText": "Month to Date Sales Summary",
+    "mainText": " Welcome to Transcom Limited. Our, month to date target is : 40.16 Crore. Till now we have made sales near : 29.19 Crore which gives us an 		achievements of 72.68 % . By the way, this month our total target is 5.02 Crore and after analyzing sales behaviour at the end of the month 		our sales will be 72.77 Crore",
+    "redirectionUrl": ""
+  },
+  {
+    "uid": "42BCDD43",
+    "updateDate": "2020-10-08 17:10:23.208811",
+    "titleText": "Yesterday Sales Summary",
+    "mainText": " Yesterday the target amount was : 5.02 Crore. and we made sales of about : 4.35 Crore Therefore our achievements was 86.75% .",
+    "redirectionUrl": ""
+  },
+  {
+    "uid": "42224CD4",
+    "updateDate": "2020-10-08 17:10:23.208811",
+    "titleText": "Todays Sales Summary",
+    "mainText": " For today, our estimated target is : 5.02 Crore. Till now we have made sales of about : 1.62 Crore which covers only 32.32% of our target. 		If our sales goes like this, we may get an achievements of 80.59% which indicates a sale value of 4.05 Crore",
+    "redirectionUrl": ""
+  }
+]

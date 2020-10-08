@@ -8,17 +8,7 @@ connection = db.connect('DRIVER={SQL Server};'
                         'DATABASE=ARCHIVESKF;'
                         'UID=sa;PWD=erp@123')
 
-def currency_converter(num):
-    num_size = len(str(num))
-    if num_size >= 8:
-        number = str(round((num / 10000000), 2))+' Crore'
-    elif num_size >= 6:
-        number = str(round(num / 100000, 2))+' million'
-    elif num_size >= 4:
-        number = str(round(num / 1000, 2)) +' Thousand'
-    else:
-        number = num
-    return number
+
 # # --------- Month target -----------------------------------------
 target_df = pd.read_sql_query("""
             select sum(target) as MonthTarget from TDCL_BranchTarget
@@ -56,14 +46,14 @@ trend_percent = round((from_current_time_sales / from_yesterday_sales) * 100, 2)
 
 mtd_trend_val  = int((sum(day_sales.sales) * 100) / trend_percent)
 
-print('Months Target = ', total_target)
-print('MTD target    = ', mtd_target)
-print('MTD sales     = ', mtd_sales)
-print('MTD achiv %   = ', mtd_achiv)
-print('MTD Trend     = ', mtd_trend_val)
-print('Trend Percent = ', trend_percent)
+# print('Months Target = ', total_target)
+# print('MTD target    = ', mtd_target)
+# print('MTD sales     = ', mtd_sales)
+# print('MTD achiv %   = ', mtd_achiv)
+# print('MTD Trend     = ', mtd_trend_val)
+# print('Trend Percent = ', trend_percent)
 
-print('\n -----------------------------------------------------')
+# print('\n -----------------------------------------------------')
 
 #  # ---------- Yesterday Summary -------------------------------
 yesterday_target = int(total_target/days_in_month)
@@ -72,21 +62,21 @@ yesterday_achiv = round((yesterday_sales/yesterday_target) * 100, 2)
 yesterday_current_time_sales = int(day_sales.CurrentSales[day_sales.CurrentSales.index[-2]])
 yesterday_trend = int((yesterday_current_time_sales * 100) / trend_percent)
 
-print('Yesterday Target = ', yesterday_target)
-print('Yesterday Sales  = ', yesterday_sales)
-print('Yesterday Achiv% = ', yesterday_achiv)
-print('This time Yesterday Trend was  = ', yesterday_trend)
-
-print('\n -----------------------------------------------------')
+# print('Yesterday Target = ', yesterday_target)
+# print('Yesterday Sales  = ', yesterday_sales)
+# print('Yesterday Achiv% = ', yesterday_achiv)
+# print('This time Yesterday Trend was  = ', yesterday_trend)
+#
+# print('\n -----------------------------------------------------')
 
 # # ----------- Todays Summary ----------------------------------
 todays_target = int(total_target/days_in_month)
 todays_sales = int(day_sales.CurrentSales.tail(1))
 todays_achiv = round((todays_sales/todays_target)* 100, 2)
 todays_trend_val = int((todays_current_sales * 100) / trend_percent)
-
-print('Todays Target     =', todays_target)
-print('Todays Sales      =', todays_current_sales)
-print('Todays Achivment  =', todays_achiv)
-print('Todays Trends val = ', todays_trend_val)
+willbe_todays_achiv = round((todays_trend_val/todays_target)*100, 2)
+# print('Todays Target     =', todays_target)
+# print('Todays Sales      =', todays_current_sales)
+# print('Todays Achivment  =', todays_achiv)
+# print('Todays Trends val = ', todays_trend_val)
 
