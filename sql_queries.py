@@ -7,28 +7,28 @@ connection = db.connect('DRIVER={SQL Server};'
                         'UID=sa;PWD=erp@123')
 
 connection1 = db.connect('DRIVER={SQL Server};'
-                        'SERVER=10.168.2.247;'
-                        'DATABASE=DCR_MREPORTING;'
-                        'UID=sa;PWD=erp')
+                         'SERVER=10.168.2.247;'
+                         'DATABASE=DCR_MREPORTING;'
+                         'UID=sa;PWD=erp')
 
 YTargetQuery = """ DECLARE @day int
                     set @day=right(convert(varchar(8),DATEADD(D,0,GETDATE()-1),112),2)
                     select sum(target)/@day as YesterdayTarget from TDCL_BranchTarget
                     where YEARMONTH= CONVERT(varchar(6), getdate(), 112) """
 
-YSalesQuery = """select  Sum(EXTINVMISC) as  YesterdaySales from OESalesDetails
-                    where TRANSDATE = convert(varchar(8),DATEADD(D,0,GETDATE()-1),112)
-                     """
-YesterdayTarget = pd.read_sql_query(YTargetQuery, connection)
-YesterdayTarget = str(int(YesterdayTarget.YesterdayTarget))
+# YSalesQuery = """select  Sum(EXTINVMISC) as  YesterdaySales from OESalesDetails
+#                     where TRANSDATE = convert(varchar(8),DATEADD(D,0,GETDATE()-1),112)
+#                      """
+# YesterdayTarget = pd.read_sql_query(YTargetQuery, connection)
+# YesterdayTarget = str(int(YesterdayTarget.YesterdayTarget))
+#
+# YSales = pd.read_sql_query(YSalesQuery, connection)
+# YSales = str(int(YSales.YesterdaySales))
+# Achievement = str(round((int(YSales)/int(YesterdayTarget))*100, 2))
 
-YSales = pd.read_sql_query(YSalesQuery, connection)
-YSales = str(int(YSales.YesterdaySales))
-Achievement = str(round((int(YSales)/int(YesterdayTarget))*100, 2))
-
-print('Yesterday Target =', YesterdayTarget)
-print('Yesterday Sales =', YSales)
-print('Achievements = ', Achievement)
+# print('Yesterday Target =', YesterdayTarget)
+# print('Yesterday Sales =', YSales)
+# print('Achievements = ', Achievement)
 
 # # # ------------------ Todays Sales Trend -----------------
 # # trendq = """ DECLARE @DATE AS SMALLDATETIME = GETDATE()
@@ -362,3 +362,24 @@ print('Achievements = ', Achievement)
 # target_failed_1p_return = actual_nsm[(actual_nsm['PercentVal'] <= 95) & (actual_nsm['ReturnPercentVal'] >= 1)]
 # target_failed_1p_return = target_failed_1p_return.nsmname.tolist()
 # print('Make more than 1 % returns = ', target_failed_1p_return)
+
+
+# # -------- Day wise sales and target -------------------------
+trend_df = pd.read_sql_query(""" select right(left(transdate, 10), 2) as date ,  SUM(EXTINVMISC) as sales 
+,SUM(case when convert(varchar,DATETIME, 114) <= convert(varchar, getdate(), 114)  then EXTINVMISC end) as CurrentSales
+from OESalesDetails 
+where --convert(varchar,DATETIME, 114) <= convert(varchar, getdate(), 114) and 
+left(TRANSDATE,6)=CONVERT(varchar(6), dateAdd(day,0,getdate()), 112)
+group by transdate
+order by right(left(transdate, 10), 2) """, connection)
+
+from_yesterday_sales = sum(trend_df.sales.iloc[0: len(trend_df.sales) - 1])
+from_current_time_sales = sum(trend_df.CurrentSales.iloc[0: len(trend_df.CurrentSales) - 1])
+todays_current_sales = int(trend_df.CurrentSales.tail(1))
+print('Todays current sales = ', todays_current_sales)
+
+trend_percent = round((from_current_time_sales / from_yesterday_sales) * 100, 2)
+trend_val = round((todays_current_sales * 100) / trend_percent, 2)
+
+print('Trend Percent = ', trend_percent)
+print(' Trends = ', trend_val)
